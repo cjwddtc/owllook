@@ -88,6 +88,7 @@ async def owllook_search(request):
         # result_sorted = sorted(
         #     parse_result, reverse=True, key=lambda res: res['timestamp']) if ':baidu' not in name else parse_result
         # 优先依靠是否解析进行排序  其次以更新时间进行排序
+        parse_result=[i for n, i in enumerate(parse_result) if i['a'] not in [dd['url'] for dd in parse_result][n+1:]]
         result_sorted = sorted(
             parse_result,
             reverse=True,
