@@ -66,32 +66,24 @@ async def owllook_search(request):
         except Exception as e:
             LOGGER.exception(e)
     # 通过搜索引擎获取检索结果
-    parse_result = None
+    parse_result = []
     for each_engine in ENGINE_PRIORITY:
         # for bing
         if each_engine == "bing":
             novels_name = "{name} 小说 阅读 最新章节".format(name=name)
-            parse_result = await cache_owllook_bing_novels_result(novels_name)
-            if parse_result:
-                break
+            parse_result.extend(await cache_owllook_bing_novels_result(novels_name))
         # for 360 so
         if each_engine == "360":
             novels_name = "{name} 小说 最新章节".format(name=name)
-            parse_result = await cache_owllook_so_novels_result(novels_name)
-            if parse_result:
-                break
+            parse_result.extend(await cache_owllook_so_novels_result(novels_name))
         # for baidu
         if each_engine == "baidu":
             novels_name = 'intitle:{name} 小说 阅读'.format(name=name) if ':baidu' not in name else name.split('baidu')[1]
-            parse_result = await cache_owllook_baidu_novels_result(novels_name)
-            if parse_result:
-                break
+            parse_result.extend(await cache_owllook_baidu_novels_result(novels_name))
         # for duckduckgo
         if each_engine == "duck_go":
             novels_name = '{name} 小说 阅读 最新章节'.format(name=name)
-            parse_result = await cache_owllook_duck_novels_result(novels_name)
-            if parse_result:
-                break
+            parse_result.extend(await cache_owllook_duck_novels_result(novels_name))
     if parse_result:
         # result_sorted = sorted(
         #     parse_result, reverse=True, key=lambda res: res['timestamp']) if ':baidu' not in name else parse_result

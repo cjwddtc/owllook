@@ -58,7 +58,7 @@ async def add_session_to_request(request):
     if user_agent:
         if CONFIG.VAL_HOST == 'true':
             if not host or host not in CONFIG.HOST:
-                return redirect('http://www.owllook.net')
+                return redirect('http://kindle.cjwddtc.win')
         if CONFIG.WEBSITE['IS_RUNNING']:
             await app.session_interface.open(request)
         else:
