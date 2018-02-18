@@ -49,7 +49,7 @@ class loop(threading.Thread,metaclass=Singleton):
     runing=True
     q=queue.Queue()
     send=email_sender()
-    max_cha=1500
+    max_cha=2250
     is_start=False
     def ss(self):
         if not self.is_start:
@@ -66,12 +66,12 @@ class loop(threading.Thread,metaclass=Singleton):
                     break
                 pass
             else:
-                print(data[0]+"start"+str(threading.current_thread()))
-                f=os.popen("ebook-convert /opt/kindle/asd.recipe /tmp/%s.mobi --no-inline-toc --mobi-file-type new --output-profile kindle_voyage"%data[0],"w")
+                print(data[0]+"start")
+                f=os.popen("ebook-convert /opt/owllook/owllook.recipe /tmp/%s.mobi --no-inline-toc --mobi-file-type new --output-profile kindle_voyage"%data[0],"w")
                 f.write(json.dumps(data[:-1]))
                 f.close()
                 print(data[0]+"end")
-                self.send.send(data[2],"/tmp/%s.mobi"%data[0],data[0]+".mobi")
+                self.send.send(data[-1],"/tmp/%s.mobi"%data[0],data[0]+".mobi")
                 print(data[0]+"send")
     def stop(self):
         self.runing=False
@@ -79,20 +79,9 @@ class loop(threading.Thread,metaclass=Singleton):
     def add(self,title,links,address):
         count=0
         n=len(links)
-        print(n)
-        while n-count*self.max_cha>self.max_cha:
-            print("%d:%d"%(count*self.max_cha,(count+1)*self.max_cha))
-            self.q.put(("%s第%d卷"%(title,count+1),links[count*self.max_cha:(count+1)*self.max_cha],address))
+        while n>count*self.max_cha:
+            self.q.put(("%s第%d卷"%(title,count+1),links[count*self.max_cha:min((count+1)*self.max_cha,n)],address))
             count=count+1
-        if not n==count*self.max_cha:
-            st=None
-            if count==0:
-                st=title
-            else:
-                st="%s第%d卷"%(title,count+1)
-            sig=count*self.max_cha
-            print("%s_%d:"%(st,sig))
-            self.q.put((st,links[sig:],address))
 
 class areader(HTMLParser):
     chapters=[]

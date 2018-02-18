@@ -1,7 +1,4 @@
-﻿from selenium.webdriver import Firefox as browser
-from selenium.webdriver.firefox.options import Options
-from lxml import etree
-import os
+﻿import os
 import sys
 import json
 from calibre.web.feeds.recipes import BasicNewsRecipe
@@ -10,8 +7,8 @@ class asd(BasicNewsRecipe):
     encoding = 'utf-8' # 编码
     remove_javascript = True # 去除 JavaScript 脚本
     auto_cleanup = True # 自动清理 HTML 代码
-    simultaneous_downloads = 4
-    max_articles_per_feed=10000
+    simultaneous_downloads = 10
+    max_articles_per_feed=15000
     def __init__(self,*canshu):
         (self.title,self.links)=json.load(sys.stdin)
         super(asd,self).__init__(*canshu)
@@ -25,5 +22,3 @@ class asd(BasicNewsRecipe):
             count+=1
         all.append((str(count*150+1),chapters))
         return all
-
-
