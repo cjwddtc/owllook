@@ -13,7 +13,7 @@ class asd(BasicNewsRecipe):
         self.title=json.load(sys.stdin)
         super(asd,self).__init__(*canshu)
     def parse_index(self):
-        f=open('/tmp/ow_links'%self.title,'r')
+        f=open('/tmp/ow_links','r')
         chapters=json.load(f)
         f.close()
         all=[]
