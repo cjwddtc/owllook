@@ -12,7 +12,6 @@ from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
-from html.parser import HTMLParser
 
 class email_sender:
     def __init__(self):
@@ -82,7 +81,9 @@ while True:
     # 接受一个新连接:
     sock, addr = s.accept()
     print("recve1")
-    l.add(*pickle.loads(sock.recv(10000000)))
+    f=sock.recv(10000000)
+    t=pickle.loads(f)
+    l.add(*t)
     print("recve2")
     sock.close()
 #a=areader()
