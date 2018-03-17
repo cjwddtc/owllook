@@ -168,16 +168,21 @@ async def owllook_search(request):
 class areader(HTMLParser):
     chapters=[]
     def handle_starttag(self, tag, attrs):
+        chapters=[]
+        cha=None
+        title=None
+    def handle_starttag(self, tag, attrs):
         if tag=="a":
-            href=None
-            title=None
             for at in attrs:
                 if(at[0]=='href'):
-                    href=at[1]
-                elif(at[0]=='title'):
-                    title=at[1]
-            if href!=None and title!=None:
-                self.chapters.append((title,href))
+                    self.cha=at[1]
+    def handle_endtag(self, tag):
+        if tag=="a":
+            if self.cha[-4:]=='html':
+                self.chapters.append((self.title,self.cha))
+
+    def handle_data(self, data):
+        self.title=data
 
 @novels_bp.route("/chapter")
 async def chapter(request):
@@ -214,6 +219,7 @@ async def chapter(request):
             s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             s.connect(('127.0.0.1', 31419))
             f=open('/tmp/ow_links','w')
+            print(len(h.chapters))
             jjj.dump([{'title':title,'url':link%(curl,urllib.parse.quote(title), urllib.parse.quote(novels_name))} for (title,curl) in h.chapters],f)
             f.close()
             s.send(pickle.dumps((novels_name,len(h.chapters),"15754601871@kindle.cn")))
