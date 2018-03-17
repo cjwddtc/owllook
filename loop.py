@@ -65,9 +65,8 @@ class loop(threading.Thread):
     def stop(self):
         self.runing=False
         self.join()
-    def add(self,title,links,address):
+    def add(self,title,n,address):
         count=0
-        n=len(links)
         while n>count*self.max_cha:
             self.q.put(("%s第%d卷"%(title,count+1),count*self.max_cha,min((count+1)*self.max_cha,n),address))
             count=count+1
