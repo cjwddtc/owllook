@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import time
+import pickle
 import urllib
 from jinja2 import Environment, PackageLoader, select_autoescape
 from operator import itemgetter
@@ -13,7 +14,6 @@ from owllook.fetcher.cache import cache_owllook_novels_content, cache_owllook_no
     cache_owllook_baidu_novels_result, cache_owllook_so_novels_result, cache_owllook_search_ranking, \
     cache_owllook_bing_novels_result, cache_owllook_duck_novels_result
 from owllook.config import RULES, LOGGER, REPLACE_RULES, ENGINE_PRIORITY, CONFIG
-import loop
 novels_bp = Blueprint('novels_blueprint')
 novels_bp.static('/static/novels', CONFIG.BASE_DIR + '/static/novels')
 
@@ -161,10 +161,6 @@ async def owllook_search(request):
     else:
         return html("No Result！请将小说名反馈给本站，谢谢！")
 
-gent=loop.loop()
-print("runing once")
-print(gent)
-gent.ss()
 
 @novels_bp.route("/chapter")
 async def chapter(request):
@@ -198,8 +194,10 @@ async def chapter(request):
                 content_url = url
             (a,b)=h.chapters[0]
             link="http://127.0.0.1:8001/owllook_content?url=" + content_url + "%s&name=%s&chapter_url=" + url + "&novels_name=%s"
-            gent.add(novels_name,[{'title':title,'url':link%(curl,urllib.parse.quote(title), urllib.parse.quote(novels_name))} for (title,curl) in h.chapters],"15754601871@kindle.cn")            
-            return redirect("https://kindle.cjwddtc.win")
+            socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            s.connect(('127.0.0.1', 31419))
+            s.send(pickle.dumps((novels_name,[{'title':title,'url':link%(curl,urllib.parse.quote(title), urllib.parse.quote(novels_name))} for (title,curl) in h.chapters],"15754601871@kindle.cn")))
+            return redirect("https://fss.cjwddtc.win")
         return template(
             'chapter.html', novels_name=novels_name, url=url, content_url=content_url, soup=content)
     else:

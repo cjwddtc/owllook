@@ -6,6 +6,7 @@ import queue
 import socket
 import threading
 import smtplib
+import pickle
 from email.mime.text import MIMEText
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
@@ -38,23 +39,12 @@ class email_sender:
                 print("reconnecting")
                 self.connect()
 
-class Singleton(type):
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
 
-class loop(threading.Thread,metaclass=Singleton):
+class loop(threading.Thread):
     runing=True
     q=queue.Queue()
     send=email_sender()
     max_cha=2250
-    is_start=False
-    def ss(self):
-        if not self.is_start:
-            self.is_start=True
-            self.start()
     def run(self):
         print("start run")
         while True:
@@ -99,6 +89,18 @@ class areader(HTMLParser):
     def handle_data(self, data):
         self.title=data
 
+socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.bind(('127.0.0.1', 31419))
+s.listen(5)
+l=loop()
+l.start()
+while True:
+    # 接受一个新连接:
+    sock, addr = s.accept()
+    print("recve1")
+    l.add(*pickle.loads(sock.recv(10000000)))
+    print("recve2")
+    sock.close()
 #a=areader()
 #a.feed("<a href='qqq'></a><a href='ddd'></a>")
 #for i in a.chas:
