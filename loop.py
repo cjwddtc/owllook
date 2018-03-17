@@ -49,27 +49,28 @@ class loop(threading.Thread):
         while True:
             data=None
             try:
-                data=self.q.get(True,1)
+                (title,address)=self.q.get(True,1)
             except queue.Empty:
                 if not self.runing:
                     break
                 pass
             else:
-                print(data[0]+"start")
-                f=os.popen("ebook-convert /opt/owllook/owllook.recipe /tmp/%s.mobi --no-inline-toc --mobi-file-type new --output-profile kindle_voyage"%data[0],"w")
-                f.write(json.dumps(data[:-1]))
+                print(title+"start")
+                f=os.popen("ebook-convert /opt/owllook/owllook.recipe /tmp/%s.mobi --no-inline-toc --mobi-file-type new --output-profile kindle_voyage"%title,"w")
+                f.write(json.dumps(title))
                 f.close()
-                print(data[0]+"end")
-                self.send.send(data[-1],"/tmp/%s.mobi"%data[0],data[0]+".mobi")
-                print(data[0]+"send")
+                print(title+"end")
+                self.send.send(address,"/tmp/%s.mobi"%title,title+".mobi")
+                print(title+"send")
     def stop(self):
         self.runing=False
         self.join()
     def add(self,title,n,address):
-        count=0
-        while n>count*self.max_cha:
-            self.q.put(("%s第%d卷"%(title,count+1),count*self.max_cha,min((count+1)*self.max_cha,n),address))
-            count=count+1
+        self.q.put((title,address))
+        #count=0
+        #while n>count*self.max_cha:
+            #self.q.put(("%s第%d卷"%(title,count+1),count*self.max_cha,min((count+1)*self.max_cha,n),address))
+            #count=count+1
 
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.bind(('127.0.0.1', 31419))
