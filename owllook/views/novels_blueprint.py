@@ -162,6 +162,22 @@ async def owllook_search(request):
         return html("No Result！请将小说名反馈给本站，谢谢！")
 
 
+class areader(HTMLParser):
+    chapters=[]
+    cha=None
+    title=None
+    def handle_starttag(self, tag, attrs):
+        if tag=="a":
+            for at in attrs:
+                if(at[0]=='href'):
+                    self.cha=at[1]
+    def handle_endtag(self, tag):
+        if tag=="a":
+            self.chapters.append((self.title,self.cha))
+
+    def handle_data(self, data):
+        self.title=data
+
 @novels_bp.route("/chapter")
 async def chapter(request):
     """
@@ -184,7 +200,7 @@ async def chapter(request):
         content = str(content).strip('[],, Jjs').replace(', ', '').replace('onerror', '').replace('js', '').replace(
             '加入书架', '')
         if request.args.get('add_kindle', None):
-            h=loop.areader()
+            h=areader()
             h.feed(content)
             if (content_url == '1'):
                 content_url = ''

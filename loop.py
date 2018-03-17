@@ -73,22 +73,6 @@ class loop(threading.Thread):
             self.q.put(("%s第%d卷"%(title,count+1),links[count*self.max_cha:min((count+1)*self.max_cha,n)],address))
             count=count+1
 
-class areader(HTMLParser):
-    chapters=[]
-    cha=None
-    title=None
-    def handle_starttag(self, tag, attrs):
-        if tag=="a":
-            for at in attrs:
-                if(at[0]=='href'):
-                    self.cha=at[1]
-    def handle_endtag(self, tag):
-        if tag=="a":
-            self.chapters.append((self.title,self.cha))
-
-    def handle_data(self, data):
-        self.title=data
-
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.bind(('127.0.0.1', 31419))
 s.listen(5)
