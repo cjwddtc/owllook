@@ -2,7 +2,7 @@
 
 ### 1.说明
 
-网络小说搜索引擎——owllook：
+网络小说搜索引擎——owllook，公众号[**粮草小说**](http://oe7yjec8x.bkt.clouddn.com/howie/2018-03-13-%E7%B2%AE%E8%8D%89%E5%B0%8F%E8%AF%B4.jpg-blog.howie)，有兴趣的话可以关注下：
 
 - 演示网址：[https://www.owllook.net/](https://www.owllook.net/)
 - 博客介绍：[http://blog.howie6879.cn/post/22/](http://blog.howie6879.cn/post/22/)
@@ -50,7 +50,7 @@ gunicorn --bind 127.0.0.1:8001 --worker-class sanic.worker.GunicornWorker server
 
 # 方案二
 docker build -t owllook:0.1 .
-# 在dev_owllook.env里面填上数据库配置 数据库ip需要注意 不得填localhost
+# 在dev_owllook.env里面填上数据库配置 数据库ip需要注意 请将连接ip设置为ifconfig显示的ip
 docker run --env-file ./dev_owllook.env -d -p 8001:8001 owllook:0.1
 ```
 
@@ -101,9 +101,18 @@ docker run --env-file ./dev_owllook.env -d -p 8001:8001 owllook:0.1
 
 ![content](./docs/imgs/content.png)
 
-### 3.License
+### 3.FAQ
 
-`owllook` is offered under the Apache 2 license.
+**为什么首页榜单为空白？**
+
+这个是根据小说搜索次数显示的，每天刷新一次，使用多了就会有
+
+**小说榜单页面为什么没有内容？**
+
+需要运行`owllook/spiders/spider_console.py`，
+目前代码中是设定60分钟运行一次，运行的时候请酌情更改，
+`os.environ['MODE'] = 'PRO'` 这段代码也请注释掉
+
 
 ### 4.感谢
 
@@ -111,17 +120,11 @@ docker run --env-file ./dev_owllook.env -d -p 8001:8001 owllook:0.1
 
 - sanic：基于Python 3.5+的异步web服务器
 
-- sanic_session：sanic的持续会话插件
-
-- uvloop：sanic默认使用uvloop，替代asyncio本身的loop
-
 - motor：异步的mongodb驱动
 
 - ​Jinja2：基于python的模板引擎
 
 - aiohttp：异步请求
-
-- aiocache：异步缓存，本项目改用了其中的decorator部分，缓存数据库使用redis
 
 - caddy：基于go的web服务器
 
@@ -133,22 +136,13 @@ docker run --env-file ./dev_owllook.env -d -p 8001:8001 owllook:0.1
 
 [mdui](https://github.com/zdhxiong/mdui )：MDUI 是一个基于 Material Design 的前端框架
 
-**感谢以下捐赠者 ^_^ :**
-- 12hStudy: 5 元
-- 佚名：5元
-- 佚名：50元
-- 路人甲、：100元
-- 盛阿德：20元
-- shine：50元
-- 江黑龙：10元
-- Future：100元
-- Mongol Hun ：20元
-- 佚名：15元
-- 人到中年：100元
-- Black：6元
-- 滑稽：5元
-- w.：20元
-- 包子.：6.6元
-- 佚名：200元
+**捐赠：**
 
 <img src="http://oe7yjec8x.bkt.clouddn.com/howie/2017-01-25-wx.png" width = "400" height = "400" alt="donate" align=center />
+
+
+感谢以下捐赠者，具体见[捐赠名单](./DONATE.md) ^_^
+
+### 5.License
+
+`owllook` is offered under the Apache 2 license.
