@@ -15,6 +15,7 @@ class asd(BasicNewsRecipe):
     def parse_index(self):
         f=open('/tmp/%s_links'%self.title,r)
         chapters=json.load(f)[self.be,self.en]
+        f.close()
         all=[]
         count=0
         while len(chapters)>150:
