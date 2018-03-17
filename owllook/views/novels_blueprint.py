@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import time
 import pickle
+import json
 from html.parser import HTMLParser
 import urllib
 import socket
@@ -214,7 +215,10 @@ async def chapter(request):
             link="http://127.0.0.1:8001/owllook_content?url=" + content_url + "%s&name=%s&chapter_url=" + url + "&novels_name=%s"
             s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             s.connect(('127.0.0.1', 31419))
-            s.send(pickle.dumps((novels_name,[{'title':title,'url':link%(curl,urllib.parse.quote(title), urllib.parse.quote(novels_name))} for (title,curl) in h.chapters],"15754601871@kindle.cn")))
+            f=open('/tmp/%s_links'%title,w)
+            json.dump([{'title':title,'url':link%(curl,urllib.parse.quote(title), urllib.parse.quote(novels_name))} for (title,curl) in h.chapters],f)
+            f.close()
+            s.send(pickle.dumps((novels_name,len(h.chapters),"15754601871@kindle.cn")))
             return redirect("https://fss.cjwddtc.win")
         return template(
             'chapter.html', novels_name=novels_name, url=url, content_url=content_url, soup=content)

@@ -69,7 +69,7 @@ class loop(threading.Thread):
         count=0
         n=len(links)
         while n>count*self.max_cha:
-            self.q.put(("%s第%d卷"%(title,count+1),links[count*self.max_cha:min((count+1)*self.max_cha,n)],address))
+            self.q.put(("%s第%d卷"%(title,count+1),count*self.max_cha,min((count+1)*self.max_cha,n),address))
             count=count+1
 
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)

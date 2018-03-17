@@ -10,10 +10,11 @@ class asd(BasicNewsRecipe):
     simultaneous_downloads = 10
     max_articles_per_feed=15000
     def __init__(self,*canshu):
-        (self.title,self.links)=json.load(sys.stdin)
+        (self.title,self.be,self.en)=json.load(sys.stdin)
         super(asd,self).__init__(*canshu)
     def parse_index(self):
-        chapters=self.links
+        f=open('/tmp/%s_links'%self.title,r)
+        chapters=json.load(f)[self.be,self.en]
         all=[]
         count=0
         while len(chapters)>150:
