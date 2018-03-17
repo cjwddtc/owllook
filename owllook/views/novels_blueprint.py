@@ -176,7 +176,7 @@ class areader(HTMLParser):
                     href=at[1]
                 elif(at[0]=='title'):
                     title=at[1]
-            if href!=None && title!=None:
+            if href!=None and title!=None:
                 self.chapters.append((title,href))
 
 @novels_bp.route("/chapter")
