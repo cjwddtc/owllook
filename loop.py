@@ -82,6 +82,7 @@ while True:
     sock, addr = s.accept()
     print("recve1")
     f=sock.recv(10000000)
+    print(len(f))
     t=pickle.loads(f)
     l.add(*t)
     print("recve2")
