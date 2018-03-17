@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import time
 import pickle
+from html.parser import HTMLParser
 import urllib
 from jinja2 import Environment, PackageLoader, select_autoescape
 from operator import itemgetter
