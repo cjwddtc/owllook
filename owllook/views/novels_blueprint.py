@@ -194,7 +194,7 @@ async def chapter(request):
                 content_url = url
             (a,b)=h.chapters[0]
             link="http://127.0.0.1:8001/owllook_content?url=" + content_url + "%s&name=%s&chapter_url=" + url + "&novels_name=%s"
-            socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+            s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             s.connect(('127.0.0.1', 31419))
             s.send(pickle.dumps((novels_name,[{'title':title,'url':link%(curl,urllib.parse.quote(title), urllib.parse.quote(novels_name))} for (title,curl) in h.chapters],"15754601871@kindle.cn")))
             return redirect("https://fss.cjwddtc.win")

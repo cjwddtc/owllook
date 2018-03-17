@@ -89,7 +89,7 @@ class areader(HTMLParser):
     def handle_data(self, data):
         self.title=data
 
-socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.bind(('127.0.0.1', 31419))
 s.listen(5)
 l=loop()
