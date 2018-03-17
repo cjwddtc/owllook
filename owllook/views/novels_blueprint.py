@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import time
 import pickle
-import json
+import json as jjj
 from html.parser import HTMLParser
 import urllib
 import socket
@@ -167,19 +167,17 @@ async def owllook_search(request):
 
 class areader(HTMLParser):
     chapters=[]
-    cha=None
-    title=None
     def handle_starttag(self, tag, attrs):
         if tag=="a":
+            href=None
+            title=None
             for at in attrs:
                 if(at[0]=='href'):
-                    self.cha=at[1]
-    def handle_endtag(self, tag):
-        if tag=="a":
-            self.chapters.append((self.title,self.cha))
-
-    def handle_data(self, data):
-        self.title=data
+                    href=at[1]
+                elif(at[0]=='title'):
+                    title=at[1]
+            if href!=None && title!=None:
+                self.chapters.append((title,href))
 
 @novels_bp.route("/chapter")
 async def chapter(request):
@@ -216,7 +214,7 @@ async def chapter(request):
             s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
             s.connect(('127.0.0.1', 31419))
             f=open('/tmp/%s_links'%novels_name,'w')
-            json.dump([{'title':title,'url':link%(curl,urllib.parse.quote(title), urllib.parse.quote(novels_name))} for (title,curl) in h.chapters],f)
+            jjj.dump([{'title':title,'url':link%(curl,urllib.parse.quote(title), urllib.parse.quote(novels_name))} for (title,curl) in h.chapters],f)
             f.close()
             s.send(pickle.dumps((novels_name,len(h.chapters),"15754601871@kindle.cn")))
             return redirect("https://fss.cjwddtc.win")
