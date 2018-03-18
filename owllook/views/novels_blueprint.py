@@ -167,10 +167,8 @@ async def owllook_search(request):
 
 class areader(HTMLParser):
     chapters=[]
-    def handle_starttag(self, tag, attrs):
-        chapters=[]
-        cha=None
-        title=None
+    cha=None
+    title=None
     def handle_starttag(self, tag, attrs):
         if tag=="a":
             for at in attrs:
@@ -178,8 +176,8 @@ class areader(HTMLParser):
                     self.cha=at[1]
     def handle_endtag(self, tag):
         if tag=="a":
-            if self.cha[-4:]=='html':
-                self.chapters.append((self.title,self.cha))
+            #if self.cha[-4:]=='html':
+            self.chapters.append((self.title,self.cha))
 
     def handle_data(self, data):
         self.title=data

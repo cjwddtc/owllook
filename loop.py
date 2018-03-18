@@ -17,7 +17,7 @@ class email_sender:
     def __init__(self):
         self.connect()
     def connect(self):
-        self.server=smtplib.SMTP("smtp-mail.outlook.com", 587)    
+        self.server=smtplib.SMTP("smtp-mail.outlook.com", 587)
         self.server.starttls()
         self.server.login("lsy_send_kindle@outlook.com","LSYsendkindle")
     def send(self,des,path,name):
@@ -56,7 +56,7 @@ class loop(threading.Thread):
                 pass
             else:
                 print(title+"start")
-                f=os.popen("ebook-convert /opt/owllook/owllook.recipe /tmp/%s.mobi --no-inline-toc --mobi-file-type new --output-profile kindle_voyage"%title,"w")
+                f=os.popen("ebook-convert /opt/owllook/owllook.recipe /tmp/%s.epub --output-profile kindle"%title,"w")
                 f.write(json.dumps(title))
                 f.close()
                 print(title+"end")
